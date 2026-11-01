@@ -72,7 +72,7 @@ surface-based analysis and integration with 3D Slicer.
 Clone the repository and enter the project directory:
 
 ```bash
-git clone https://github.com/ChengjinLii/DDSurfer.git
+git clone https://github.com/NeuroDMRI/DDSurfer.git
 cd DDSurfer
 ```
 
@@ -417,7 +417,7 @@ and their third-party notices.
 ## Support
 
 For questions, bug reports or feature requests, please open a
-[GitHub issue](https://github.com/ChengjinLii/DDSurfer/issues).
+[GitHub issue](https://github.com/NeuroDMRI/DDSurfer/issues).
 
 ---
 

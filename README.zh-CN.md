@@ -79,7 +79,7 @@ DDSurfer 已发表于 **Advanced Science**：
 克隆仓库并进入项目目录：
 
 ```bash
-git clone https://github.com/ChengjinLii/DDSurfer.git
+git clone https://github.com/NeuroDMRI/DDSurfer.git
 cd DDSurfer
 ```
 
@@ -433,7 +433,7 @@ DDSurfer 使用 [MIT 许可证](LICENSE)。第三方组件和外部工具仍遵�
 ## 问题与反馈
 
 如有使用问题、缺陷报告或功能建议，请提交
-[GitHub issue](https://github.com/ChengjinLii/DDSurfer/issues)。
+[GitHub issue](https://github.com/NeuroDMRI/DDSurfer/issues)。
 
 ---
 
