@@ -410,8 +410,9 @@ python tests/check_environment.py --device cuda:0 --post-process --auto-mask
 
 ## Slicer 扩展
 
-**SlicerDDSurfer 即将开源**，仓库地址：
-[ChengjinLii/SlicerDDSurfer](https://github.com/ChengjinLii/SlicerDDSurfer)。
+DDSurfer 对应的 3D Slicer 扩展为 **SlicerDSpace**：
+[项目官网](https://neurodmri.github.io/SlicerDSpace/) |
+[代码仓库](https://github.com/NeuroDMRI/SlicerDSpace)。
 
 输出的 OBJ 表面在文件头声明 `SPACE=RAS`，以便 3D Slicer 自动识别坐标系。
 对于没有该声明的旧文件，请在 Slicer 的 Add Data 加载选项中手动选择 **RAS**。
