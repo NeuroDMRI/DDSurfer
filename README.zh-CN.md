@@ -159,6 +159,7 @@ python3 run_ddsurfer_pipeline.py --subject <subID> \
 | `--max-gpu-gib 24` | 推理阶段的显存分配预算，单位 GiB，默认 24。 |
 | `--auto-mask` | 使用 FreeSurfer SynthStrip 生成缺失的脑掩膜，默认关闭。 |
 | `--preprocess-jobs 2` | 并行运行相互独立的 DTI 处理阶段，默认并发数为 1。 |
+| `--no-surface-refinement` | 关闭默认的原生空间表面优化。 |
 | `--post-process` | 使用本机编译组件或已有 FreeSurfer 进行皮层后处理，默认关闭。 |
 | `--postprocess-backend` | 选择 `auto`（默认）、`native` 或 `freesurfer`。 |
 | `--keep-cache` | 保留中间文件及各阶段的详细日志。 |

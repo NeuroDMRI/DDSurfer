@@ -32,6 +32,10 @@ def main(argv=None):
     parser.add_argument('--predict-mode', choices=('wm','all'), default='all')
     parser.add_argument('--output-dir', type=Path, help='Final native surface directory.')
     parser.add_argument('--metadata-dir', type=Path, help='Directory for detailed conversion records.')
+    parser.add_argument('--dti-dir', type=Path, help='Native DTI directory for optional surface refinement.')
+    parser.add_argument('--mask', type=Path, help='Native brain mask for optional surface refinement.')
+    parser.add_argument('--refine', action='store_true', help='Enable native-space surface refinement.')
+    parser.add_argument('--threads', type=int, default=8, help='CPU thread budget for surface refinement.')
     args = parser.parse_args(argv)
     transform_path = args.data_root/args.subject/f'{args.subject}-b0ToAtlasT2.tfm'
     transform = sitk.ReadTransform(str(transform_path))
@@ -44,6 +48,7 @@ def main(argv=None):
         shutil.copyfile(transform_path, saved_transform)
     else:
         saved_transform = transform_path
+    entries = []
     for hemi,short in [('left','lh'),('right','rh')]:
         for surface in (['wm','pial'] if args.predict_mode=='all' else ['wm']):
             source=args.pred_root/'mni'/args.subject/f'{args.subject}_predicted_{surface}_surface_{hemi}.obj'
@@ -51,15 +56,25 @@ def main(argv=None):
             vertices=atlas_ras_to_native_ras(mesh.vertices,transform)
             if not np.isfinite(vertices).all():raise ValueError('Nonfinite native vertices')
             stem = f'{short}.{"white" if surface == "wm" else "pial"}'
-            output=directory/(f'{stem}.obj' if args.output_dir is not None else f'{args.subject}_predicted_{surface}_{short}.obj')
-            error = write_obj(output, vertices, mesh.faces)
-            metadata_path = (args.metadata_dir / f'{stem}.json' if args.metadata_dir is not None else
-                             logs / f'{stem}.json' if args.output_dir is not None else output.with_suffix('.json'))
-            atomic_json(metadata_path,dict(coordinate_space='native_scanner_RAS_mm',
-                        transform=str(saved_transform),transform_sha256=sha256_file(saved_transform),
-                        transform_direction='atlas_LPS_to_native_LPS_pull_map',source_sha256=sha256_file(source),
-                        output_sha256=sha256_file(output), max_export_error_mm=error))
-            print(f'Saved {output} (native RAS mm)',flush=True)
+            entries.append((stem, surface, short, source, vertices, np.asarray(mesh.faces)))
+    if args.refine and args.dti_dir is not None and args.mask is not None:
+        from inference.surface_refine import refine_bilateral_surfaces
+        refined = refine_bilateral_surfaces(
+            {stem: (vertices, faces) for stem, _, _, _, vertices, faces in entries},
+            args.dti_dir, args.subject, args.mask, nthreads=args.threads,
+        )
+        entries = [(stem, surface, short, source, refined[stem], faces)
+                   for stem, surface, short, source, _, faces in entries]
+    for stem, surface, short, source, vertices, faces in entries:
+        output=directory/(f'{stem}.obj' if args.output_dir is not None else f'{args.subject}_predicted_{surface}_{short}.obj')
+        error = write_obj(output, vertices, faces)
+        metadata_path = (args.metadata_dir / f'{stem}.json' if args.metadata_dir is not None else
+                         logs / f'{stem}.json' if args.output_dir is not None else output.with_suffix('.json'))
+        atomic_json(metadata_path,dict(coordinate_space='native_scanner_RAS_mm',
+                    transform=str(saved_transform),transform_sha256=sha256_file(saved_transform),
+                    transform_direction='atlas_LPS_to_native_LPS_pull_map',source_sha256=sha256_file(source),
+                    output_sha256=sha256_file(output), max_export_error_mm=error))
+        print(f'Saved {output} (native RAS mm)',flush=True)
 
 
 if __name__=='__main__':
