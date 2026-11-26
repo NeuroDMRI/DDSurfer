@@ -69,7 +69,12 @@ surface-based analysis and integration with 3D Slicer.
 
 ## Installation
 
-Clone the repository and enter the project directory:
+> **Recommended:** For the easiest setup and interactive use, we recommend running
+> DDSurfer through the **SlicerDSpace** 3D Slicer extension — see the
+> [SlicerDSpace Official Website](https://neurodmri.github.io/SlicerDSpace/)
+> ([GitHub](https://github.com/NeuroDMRI/SlicerDSpace)).
+
+For command-line use, clone the repository and enter the project directory:
 
 ```bash
 git clone https://github.com/NeuroDMRI/DDSurfer.git

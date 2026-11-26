@@ -76,7 +76,11 @@ DDSurfer 已发表于 **Advanced Science**：
 
 ## 安装
 
-克隆仓库并进入项目目录：
+> **推荐方式：** 为获得更简便的配置体验与交互式使用流程，推荐优先通过 3D Slicer 扩展
+> **SlicerDSpace** 运行 DDSurfer，详见
+> [SlicerDSpace 官网](https://neurodmri.github.io/SlicerDSpace/)（[GitHub](https://github.com/NeuroDMRI/SlicerDSpace)）。
+
+如需使用命令行版本，请克隆仓库并进入项目目录：
 
 ```bash
 git clone https://github.com/NeuroDMRI/DDSurfer.git
